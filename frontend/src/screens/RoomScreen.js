@@ -215,11 +215,17 @@ const RoomScreen = () => {
                     >
                       <option value=''>-----------</option>
                       {departmentData &&
-                        departmentData.map((department) => (
-                          <option key={department._id} value={department._id}>
-                            {department.name}
-                          </option>
-                        ))}
+                        departmentData.map(
+                          (department) =>
+                            department.isActive && (
+                              <option
+                                key={department._id}
+                                value={department._id}
+                              >
+                                {department.name}
+                              </option>
+                            )
+                        )}
                     </select>
                     {errors.department && (
                       <span className='text-danger'>

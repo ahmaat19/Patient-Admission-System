@@ -14,12 +14,13 @@ import PrivateRoute from './PrivateRoute'
 import UserLogHistoryScreen from '../../screens/LogHistoryScreen'
 import ForgotPasswordScreen from '../../screens/ForgotPasswordScreen'
 import ResetPasswordScreen from '../../screens/ResetPasswordScreen'
+import AdmissionScreen from '../../screens/AdmissionScreen'
 
 const Routes = () => {
   return (
     <section className='mx-auto mt-5'>
       <Switch>
-        <Route exact path='/' component={HomeScreen} />
+        <Route exact path='/' component={AdmissionScreen} />
         <Route path='/forgotpassword' component={ForgotPasswordScreen} />
         <Route path='/login' component={LoginScreen} />
         <Route path='/register' r component={RegisterScreen} />

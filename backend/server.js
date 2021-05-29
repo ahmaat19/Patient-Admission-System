@@ -8,6 +8,7 @@ import connectDB from './config/db.js'
 import userRoutes from './routes/userRoutes.js'
 import departmentRoutes from './routes/departmentRoutes.js'
 import roomRoutes from './routes/roomRoutes.js'
+import admissionRoutes from './routes/admissionRoutes.js'
 
 dotenv.config()
 
@@ -24,6 +25,7 @@ app.use(express.json())
 app.use('/api/users', userRoutes)
 app.use('/api/departments', departmentRoutes)
 app.use('/api/rooms', roomRoutes)
+app.use('/api/admissions', admissionRoutes)
 
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
