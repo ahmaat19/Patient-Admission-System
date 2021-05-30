@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-const admissionScheme = mongoose.Schema(
+const patientScheme = mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -34,9 +34,8 @@ const admissionScheme = mongoose.Schema(
     },
     room: [
       {
-        roomId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Room',
+        department: {
+          type: String,
           required: true,
         },
         room: {
@@ -63,5 +62,5 @@ const admissionScheme = mongoose.Schema(
   }
 )
 
-const AdmissionModel = mongoose.model('Admission', admissionScheme)
-export default AdmissionModel
+const PatientModel = mongoose.model('Patient', patientScheme)
+export default PatientModel

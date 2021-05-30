@@ -1,12 +1,24 @@
 import asyncHandler from 'express-async-handler'
-import AdmissionModel from '../models/admissionModel.js'
+import PatientModel from '../models/patientModel.js'
 
-export const getAdmissions = asyncHandler(async (req, res) => {
-  const obj = await AdmissionModel.find({}).sort({ createdAt: -1 })
+export const getPatients = asyncHandler(async (req, res) => {
+  const obj = await PatientModel.find({}).sort({ createdAt: -1 })
   res.status(201).json(obj)
 })
 
-export const addAdmission = asyncHandler(async (req, res) => {
+export const getPatientDetails = asyncHandler(async (req, res) => {
+  const _id = req.params.id
+  const obj = await PatientModel.findById(_id)
+
+  if (!obj) {
+    res.status(400)
+    throw new Error(`This patient where not found`)
+  } else {
+    res.status(201).json(obj)
+  }
+})
+
+export const addPatient = asyncHandler(async (req, res) => {
   const patientId = req.body.patientId.toUpperCase()
   const user = req.user.id
   const {
@@ -15,27 +27,27 @@ export const addAdmission = asyncHandler(async (req, res) => {
     guardian,
     relationship,
     contact,
-    roomId,
     room,
+    department,
     bed,
     status,
     date,
   } = req.body
 
-  const exist = await AdmissionModel.findOne({ patientId })
+  const exist = await PatientModel.findOne({ patientId })
   if (exist) {
     res.status(400)
     throw new Error(`This patient ${patient} already admitted`)
   }
 
   const roomArr = {
-    roomId,
     room,
+    department,
     bed,
     status,
     date,
   }
-  const createObj = await AdmissionModel.create({
+  const createObj = await PatientModel.create({
     user,
     patientId,
     patient,
@@ -59,10 +71,10 @@ export const updatePatient = asyncHandler(async (req, res) => {
   const patientId = req.body.patientId.toUpperCase()
   const { patient, doctor, guardian, relationship, contact } = req.body
 
-  const obj = await AdmissionModel.findById(_id)
+  const obj = await PatientModel.findById(_id)
 
   if (obj) {
-    const exist = await AdmissionModel.find({ _id: { $ne: _id }, patientId })
+    const exist = await PatientModel.find({ _id: { $ne: _id }, patientId })
     if (exist.length === 0) {
       obj.patientId = patientId
       obj.patient = patient
@@ -84,9 +96,9 @@ export const updatePatient = asyncHandler(async (req, res) => {
   }
 })
 
-export const deleteAdmission = asyncHandler(async (req, res) => {
+export const deletePatient = asyncHandler(async (req, res) => {
   const _id = req.params.id
-  const obj = await AdmissionModel.findById(_id)
+  const obj = await PatientModel.findById(_id)
   if (!obj) {
     res.status(400)
     throw new Error('This patient is not admitted yet')

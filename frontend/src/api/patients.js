@@ -12,37 +12,49 @@ const config = () => {
   }
 }
 
-export const getAdmissions = async () => {
+export const getPatients = async () => {
   try {
-    const { data } = await axios.get(`/api/admissions`, config())
+    const { data } = await axios.get(`/api/patients`, config())
     return data
   } catch (error) {
     throw error.response.data.message
   }
 }
 
-export const addAdmission = async (obj) => {
+export const getPatientDetails = async (id) => {
   try {
-    const { data } = await axios.post(`/api/admissions`, obj, config())
+    const { data } = await axios.get(
+      `/api/patients/patient/details/${id}`,
+      config()
+    )
     return data
   } catch (error) {
     throw error.response.data.message
   }
 }
 
-export const deleteAdmission = async (id) => {
+export const addPatient = async (obj) => {
   try {
-    const { data } = await axios.delete(`/api/admissions/${id}`, config())
+    const { data } = await axios.post(`/api/patients`, obj, config())
     return data
   } catch (error) {
     throw error.response.data.message
   }
 }
 
-export const updateAdmission = async (obj) => {
+export const deletePatient = async (id) => {
+  try {
+    const { data } = await axios.delete(`/api/patients/${id}`, config())
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}
+
+export const updatePatient = async (obj) => {
   try {
     const { data } = await axios.put(
-      `/api/admissions/patient/${obj._id}`,
+      `/api/patients/patient/${obj._id}`,
       obj,
       config()
     )

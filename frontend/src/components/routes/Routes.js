@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import HomeScreen from '../../screens/HomeScreen'
+// import HomeScreen from '../../screens/HomeScreen'
 import LoginScreen from '../../screens/LoginScreen'
 import ProfileScreen from '../../screens/ProfileScreen'
 import RegisterScreen from '../../screens/RegisterScreen'
@@ -14,13 +14,14 @@ import PrivateRoute from './PrivateRoute'
 import UserLogHistoryScreen from '../../screens/LogHistoryScreen'
 import ForgotPasswordScreen from '../../screens/ForgotPasswordScreen'
 import ResetPasswordScreen from '../../screens/ResetPasswordScreen'
-import AdmissionScreen from '../../screens/AdmissionScreen'
+import PatientScreen from '../../screens/PatientScreen'
+import PatientDetailScreen from '../../screens/PatientDetailScreen'
 
 const Routes = () => {
   return (
     <section className='mx-auto mt-5'>
       <Switch>
-        <Route exact path='/' component={AdmissionScreen} />
+        {/* <Route exact path='/' component={HomeScreen} /> */}
         <Route path='/forgotpassword' component={ForgotPasswordScreen} />
         <Route path='/login' component={LoginScreen} />
         <Route path='/register' r component={RegisterScreen} />
@@ -29,6 +30,19 @@ const Routes = () => {
           role={['Admin', 'User']}
           path='/profile'
           component={ProfileScreen}
+        />
+
+        <PrivateRoute
+          exact
+          role={['Admin', 'User']}
+          path='/'
+          component={PatientScreen}
+        />
+        <PrivateRoute
+          exact
+          role={['Admin', 'User']}
+          path='/patient/details/:id'
+          component={PatientDetailScreen}
         />
 
         <Route
