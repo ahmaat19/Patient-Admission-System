@@ -17,7 +17,7 @@ const PatientDetailScreen = () => {
   const { id } = useParams()
 
   const { data, error, isLoading, isError } = useQuery(
-    'patients',
+    'patientDetails',
     async () => await getPatientDetails(id),
     { retry: 0 }
   )

@@ -2,6 +2,7 @@ import React from 'react'
 import { getDepartments } from '../api/departments'
 import { useQuery } from 'react-query'
 import { getRooms } from '../api/rooms'
+import { getPatients } from '../api/patients'
 
 const AddNewPatientModalScreen = ({
   submitHandler,
@@ -19,6 +20,26 @@ const AddNewPatientModalScreen = ({
   )
 
   const { data: roomData } = useQuery('rooms', () => getRooms(), { retry: 0 })
+  const { data: patientsData } = useQuery('patients', () => getPatients(), {
+    retry: 0,
+    refetchInterval: 10000,
+  })
+
+  const vacantBeds = (number) => {
+    const occupiedBeds =
+      patientsData &&
+      patientsData.map((patient) => Number(patient.room.slice(-1)[0].bed))
+
+    let numArr = [...Array(number).keys()].map((x) => x + 1)
+
+    let filtered = numArr.filter((x) => !occupiedBeds.includes(x))
+
+    return filtered.map((bed) => (
+      <option key={bed} value={bed}>
+        {bed}
+      </option>
+    ))
+  }
 
   return (
     <div
@@ -285,11 +306,8 @@ const AddNewPatientModalScreen = ({
                             room.isActive &&
                             room.department &&
                             room.department.name === watch().department &&
-                            room.name === watch().room && (
-                              <option key={room._id} value={room.bed}>
-                                {room.bed}
-                              </option>
-                            )
+                            room.name === watch().room &&
+                            vacantBeds(room.bed)
                         )}
                     </select>
                     {errors.bed && (
