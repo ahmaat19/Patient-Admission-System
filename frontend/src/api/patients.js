@@ -76,3 +76,28 @@ export const updatePatientTransfer = async (obj) => {
     throw error.response.data.message
   }
 }
+
+export const updatePatientDischarge = async (obj) => {
+  try {
+    const { data } = await axios.put(
+      `/api/patients/patient/discharge/${obj._id}`,
+      obj.updatedData,
+      config()
+    )
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}
+
+export const getPatientTransfer = async (patientId) => {
+  try {
+    const { data } = await axios.get(
+      `/api/patients/patient/transfer/${patientId}`,
+      config()
+    )
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}

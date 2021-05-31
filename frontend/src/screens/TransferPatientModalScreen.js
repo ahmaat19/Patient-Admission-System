@@ -62,11 +62,14 @@ const TransferPatientModalScreen = ({ data }) => {
         (patient) =>
           patient.room === watch().room &&
           patient.department === watch().department &&
+          patient.status === 'Admitted' &&
           Number(patient.bed)
       )
-    let numArr = [...Array(bed).keys()].map((x) => x + 1)
+    let numArr = [...Array(!bed ? 0 : bed).keys()].map((x) => x + 1)
 
-    let filtered = numArr.filter((x) => !occupiedBeds.includes(x))
+    let filtered = numArr.filter(
+      (x) => occupiedBeds && !occupiedBeds.includes(x)
+    )
 
     return filtered.map((bed) => (
       <option key={bed} value={bed}>

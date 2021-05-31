@@ -41,7 +41,7 @@ const Routes = () => {
         <PrivateRoute
           exact
           role={['Admin', 'User']}
-          path='/patient/details/:id'
+          path='/patient/details/:patientId/:id'
           component={PatientDetailScreen}
         />
 

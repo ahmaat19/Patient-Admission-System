@@ -44,9 +44,10 @@ const AddNewPatientModalScreen = ({
         (patient) =>
           patient.room === watch().room &&
           patient.department === watch().department &&
+          patient.status === 'Admitted' &&
           Number(patient.bed)
       )
-    let numArr = [...Array(bed).keys()].map((x) => x + 1)
+    let numArr = [...Array(!bed ? 0 : bed).keys()].map((x) => x + 1)
 
     let filtered = numArr.filter((x) => !occupiedBeds.includes(x))
 

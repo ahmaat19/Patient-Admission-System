@@ -162,7 +162,7 @@ const PatientScreen = () => {
                       </td>
                       <th className='btn-group'>
                         <Link
-                          to={`/patient/details/${patient._id}`}
+                          to={`/patient/details/${patient.patientId}/${patient._id}`}
                           className='btn btn-primary btn-sm border-0'
                         >
                           <FaFileMedicalAlt className='mb-1' /> Detail

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getPatientDetails } from '../api/patients'
+import { getPatientDetails, getPatientTransfer } from '../api/patients'
 import { useQuery } from 'react-query'
 import Loader from 'react-loader-spinner'
 import Message from '../components/Message'
@@ -13,15 +13,24 @@ import {
 import moment from 'moment'
 import UpdatePatientInfoModalScreen from './UpdatePatientInfoModalScreen'
 import TransferPatientModalScreen from './TransferPatientModalScreen'
+import DischargePatientModalScreen from './DischargePatientModalScreen'
 
 const PatientDetailScreen = () => {
-  const { id } = useParams()
+  const { id, patientId } = useParams()
 
   const { data, error, isLoading, isError } = useQuery(
     ['patientDetails', id],
     async () => await getPatientDetails(id),
     { retry: 0 }
   )
+
+  const { data: transferData } = useQuery(
+    ['transfer', patientId],
+    async () => await getPatientTransfer(patientId),
+    { retry: 0 }
+  )
+
+  console.log(transferData)
 
   return (
     <div>
@@ -45,19 +54,25 @@ const PatientDetailScreen = () => {
                 <Link to='/' className=''>
                   <FaArrowAltCircleLeft className='mb-1' /> Go Back
                 </Link>
-                <span className='fw-bold'>Patient Admission History</span>{' '}
-                <span className='btn-group'>
-                  <button
-                    className='btn btn-primary btn-sm mx-1'
-                    data-bs-toggle='modal'
-                    data-bs-target='#updatePatientTransfer'
-                  >
-                    Transfer
-                  </button>
-                  <button className='btn btn-danger btn-sm mx-1'>
-                    Discharge
-                  </button>
-                </span>
+                <span className='fw-bold'>Patient Admission Info</span>{' '}
+                {data.status !== 'Discharged' && (
+                  <span className='btn-group'>
+                    <button
+                      className='btn btn-primary btn-sm mx-1'
+                      data-bs-toggle='modal'
+                      data-bs-target='#updatePatientTransfer'
+                    >
+                      Transfer
+                    </button>
+                    <button
+                      className='btn btn-danger btn-sm mx-1'
+                      data-bs-toggle='modal'
+                      data-bs-target='#updatePatientDischarge'
+                    >
+                      Discharge
+                    </button>
+                  </span>
+                )}
               </p>
               <hr />
               <div className='table-responsive'>
@@ -91,19 +106,55 @@ const PatientDetailScreen = () => {
                   </tbody>
                 </table>
               </div>
+              {transferData && transferData.length > 0 && (
+                <>
+                  <h6 className='fw-bold text-center mt-5 pt-5'>
+                    Patient Transfer History
+                  </h6>
+                  <hr />
+                  <div className='table-responsive'>
+                    <table className='table table-sm hover bordered striped caption-top '>
+                      <thead>
+                        <tr>
+                          <th>DATE & TIME</th>
+                          <th>DOCTOR</th>
+                          <th>DEPARTMENT</th>
+                          <th>ROOM</th>
+                          <th>BED</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {transferData &&
+                          transferData.map((transfer) => (
+                            <tr key={transfer._id}>
+                              <td>{moment(transfer.dateIn).format('lll')}</td>
+                              <td>{transfer.doctor}</td>
+                              <td>{transfer.department.toUpperCase()}</td>
+                              <td>{transfer.room.toUpperCase()}</td>
+                              <td>{transfer.bed}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
             </div>
             <div className='col-md-4 col-12 border-start border-info'>
               <p className=''>
                 <span className='fw-bold'>Patient Info </span>
-                <span className='float-end text-primary'>
-                  <button
-                    className='btn btn-primary btn-sm mx-1'
-                    data-bs-toggle='modal'
-                    data-bs-target='#updatePatientInfo'
-                  >
-                    <FaEdit className='mb-1' /> Edit Patient Info
-                  </button>
-                </span>
+                {data.status !== 'Discharged' && (
+                  <span className='float-end text-primary'>
+                    <button
+                      className='btn btn-primary btn-sm mx-1'
+                      data-bs-toggle='modal'
+                      data-bs-target='#updatePatientInfo'
+                    >
+                      <FaEdit className='mb-1' /> Edit Patient Info
+                    </button>
+                  </span>
+                )}
               </p>{' '}
               <hr />
               <p className=''>
@@ -132,6 +183,7 @@ const PatientDetailScreen = () => {
           </div>
           <UpdatePatientInfoModalScreen data={!isLoading && data} />
           <TransferPatientModalScreen data={!isLoading && data} />
+          <DischargePatientModalScreen data={!isLoading && data} />
         </>
       )}
     </div>

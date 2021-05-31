@@ -1,8 +1,15 @@
 import asyncHandler from 'express-async-handler'
 import PatientModel from '../models/patientModel.js'
+import TransferModel from '../models/transferHistory.js'
 
 export const getPatients = asyncHandler(async (req, res) => {
   const obj = await PatientModel.find({}).sort({ createdAt: -1 })
+  res.status(201).json(obj)
+})
+
+export const getPatientTransfer = asyncHandler(async (req, res) => {
+  const patientId = req.params.id.toUpperCase()
+  const obj = await TransferModel.find({ patientId }).sort({ createdAt: -1 })
   res.status(201).json(obj)
 })
 
@@ -111,18 +118,43 @@ export const deletePatient = asyncHandler(async (req, res) => {
 
 export const updatePatientTransfer = asyncHandler(async (req, res) => {
   const _id = req.params.id
+  const user = req.user.id
   const { department, room, bed } = req.body
 
   const obj = await PatientModel.findOne({ _id, status: { $eq: 'Admitted' } })
 
   if (obj) {
-    // if (Number(obj.bed) === Number(bed) && obj.room === room) {
-    //   res.status(400)
-    //   throw new Error(`This ${room} with ${bed} is already occupied`)
-    // }
+    await TransferModel.create({
+      user,
+      patientId: obj.patientId,
+      patient: obj.patient,
+      doctor: obj.doctor,
+      department: obj.department,
+      room: obj.room,
+      bed: obj.bed,
+    })
+
     obj.department = department
     obj.room = room
     obj.bed = bed
+    await obj.save()
+    res.status(201).json({ status: 'success' })
+  } else {
+    res.status(400)
+    throw new Error(`This patient ${_id} were not found`)
+  }
+})
+
+export const updatePatientDischarge = asyncHandler(async (req, res) => {
+  const _id = req.params.id
+  const { dateOut, description } = req.body
+
+  const obj = await PatientModel.findOne({ _id, status: { $eq: 'Admitted' } })
+
+  if (obj) {
+    obj.dateOut = dateOut
+    obj.description = description
+    obj.status = 'Discharged'
     await obj.save()
     res.status(201).json({ status: 'success' })
   } else {
