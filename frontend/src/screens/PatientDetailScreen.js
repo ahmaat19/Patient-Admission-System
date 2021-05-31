@@ -24,7 +24,7 @@ const PatientDetailScreen = () => {
     { retry: 0 }
   )
 
-  const { data: transferData } = useQuery(
+  const { data: transferData, isLoading: isLoadingTransfer } = useQuery(
     ['transfer', patientId],
     async () => await getPatientTransfer(patientId),
     { retry: 0 }
@@ -106,38 +106,55 @@ const PatientDetailScreen = () => {
                   </tbody>
                 </table>
               </div>
-              {transferData && transferData.length > 0 && (
+
+              {isLoadingTransfer ? (
+                <div className='text-center'>
+                  <Loader
+                    type='ThreeDots'
+                    color='#00BFFF'
+                    height={100}
+                    width={100}
+                    timeout={3000} //3 secs
+                  />
+                </div>
+              ) : (
                 <>
-                  <h6 className='fw-bold text-center mt-5 pt-5'>
-                    Patient Transfer History
-                  </h6>
-                  <hr />
-                  <div className='table-responsive'>
-                    <table className='table table-sm hover bordered striped caption-top '>
-                      <thead>
-                        <tr>
-                          <th>DATE & TIME</th>
-                          <th>DOCTOR</th>
-                          <th>DEPARTMENT</th>
-                          <th>ROOM</th>
-                          <th>BED</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {transferData &&
-                          transferData.map((transfer) => (
-                            <tr key={transfer._id}>
-                              <td>{moment(transfer.dateIn).format('lll')}</td>
-                              <td>{transfer.doctor}</td>
-                              <td>{transfer.department.toUpperCase()}</td>
-                              <td>{transfer.room.toUpperCase()}</td>
-                              <td>{transfer.bed}</td>
+                  {transferData && transferData.length > 0 && (
+                    <>
+                      <h6 className='fw-bold text-center mt-5 pt-5'>
+                        Patient Transfer History
+                      </h6>
+                      <hr />
+                      <div className='table-responsive'>
+                        <table className='table table-sm hover bordered striped caption-top '>
+                          <thead>
+                            <tr>
+                              <th>DATE & TIME</th>
+                              <th>DOCTOR</th>
+                              <th>DEPARTMENT</th>
+                              <th>ROOM</th>
+                              <th>BED</th>
+                              <th></th>
                             </tr>
-                          ))}
-                      </tbody>
-                    </table>
-                  </div>
+                          </thead>
+                          <tbody>
+                            {transferData &&
+                              transferData.map((transfer) => (
+                                <tr key={transfer._id}>
+                                  <td>
+                                    {moment(transfer.dateIn).format('lll')}
+                                  </td>
+                                  <td>{transfer.doctor}</td>
+                                  <td>{transfer.department.toUpperCase()}</td>
+                                  <td>{transfer.room.toUpperCase()}</td>
+                                  <td>{transfer.bed}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </>
+                  )}
                 </>
               )}
             </div>

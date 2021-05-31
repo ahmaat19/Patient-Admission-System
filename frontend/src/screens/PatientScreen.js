@@ -167,21 +167,22 @@ const PatientScreen = () => {
                         >
                           <FaFileMedicalAlt className='mb-1' /> Detail
                         </Link>
-
-                        <button
-                          className='btn btn-danger btn-sm ms-1'
-                          onClick={() => deleteHandler(patient._id)}
-                          disabled={isLoadingDeletePatient}
-                        >
-                          {isLoadingDeletePatient ? (
-                            <span className='spinner-border spinner-border-sm' />
-                          ) : (
-                            <span>
-                              {' '}
-                              <FaTrash className='mb-1' /> Delete
-                            </span>
-                          )}
-                        </button>
+                        {patient.status !== 'Discharged' && (
+                          <button
+                            className='btn btn-danger btn-sm ms-1'
+                            onClick={() => deleteHandler(patient._id)}
+                            disabled={isLoadingDeletePatient}
+                          >
+                            {isLoadingDeletePatient ? (
+                              <span className='spinner-border spinner-border-sm' />
+                            ) : (
+                              <span>
+                                {' '}
+                                <FaTrash className='mb-1' /> Delete
+                              </span>
+                            )}
+                          </button>
+                        )}
                       </th>
                     </tr>
                   ))}
