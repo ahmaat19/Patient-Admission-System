@@ -12,12 +12,13 @@ import {
   FaUserInjured,
 } from 'react-icons/fa'
 import moment from 'moment'
+import UpdatePatientInfoModalScreen from './UpdatePatientInfoModalScreen'
 
 const PatientDetailScreen = () => {
   const { id } = useParams()
 
   const { data, error, isLoading, isError } = useQuery(
-    'patientDetails',
+    ['patientDetails', id],
     async () => await getPatientDetails(id),
     { retry: 0 }
   )
@@ -101,7 +102,11 @@ const PatientDetailScreen = () => {
               <p className=''>
                 <span className='fw-bold'>Patient Info </span>
                 <span className='float-end text-primary'>
-                  <button className='btn btn-primary btn-sm mx-1'>
+                  <button
+                    className='btn btn-primary btn-sm mx-1'
+                    data-bs-toggle='modal'
+                    data-bs-target='#updatePatientInfo'
+                  >
                     <FaEdit className='mb-1' /> Edit Patient Info
                   </button>
                 </span>
@@ -131,6 +136,7 @@ const PatientDetailScreen = () => {
               </div>
             </div>
           </div>
+          <UpdatePatientInfoModalScreen data={!isLoading && data} />
         </>
       )}
     </div>

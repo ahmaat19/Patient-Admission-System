@@ -34,7 +34,10 @@ export const addPatient = asyncHandler(async (req, res) => {
     date,
   } = req.body
 
-  const exist = await PatientModel.findOne({ patientId })
+  const exist = await PatientModel.findOne({
+    patientId,
+    generalStatus: { $eq: 'Discharged' },
+  })
   if (exist) {
     res.status(400)
     throw new Error(`This patient ${patient} already admitted`)
@@ -74,7 +77,11 @@ export const updatePatient = asyncHandler(async (req, res) => {
   const obj = await PatientModel.findById(_id)
 
   if (obj) {
-    const exist = await PatientModel.find({ _id: { $ne: _id }, patientId })
+    const exist = await PatientModel.find({
+      _id: { $ne: _id },
+      patientId,
+      generalStatus: { $eq: 'Discharged' },
+    })
     if (exist.length === 0) {
       obj.patientId = patientId
       obj.patient = patient
@@ -86,9 +93,7 @@ export const updatePatient = asyncHandler(async (req, res) => {
       res.status(201).json({ status: 'success' })
     } else {
       res.status(400)
-      throw new Error(
-        `This patient ${patient} did not admitted yet or is discharged`
-      )
+      throw new Error(`This patient ${patientId} already admitted`)
     }
   } else {
     res.status(400)

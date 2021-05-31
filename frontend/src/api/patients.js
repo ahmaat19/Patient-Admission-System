@@ -55,7 +55,7 @@ export const updatePatient = async (obj) => {
   try {
     const { data } = await axios.put(
       `/api/patients/patient/${obj._id}`,
-      obj,
+      obj.updatedData,
       config()
     )
     return data

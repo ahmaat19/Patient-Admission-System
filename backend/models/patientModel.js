@@ -10,7 +10,7 @@ const patientScheme = mongoose.Schema(
     patientId: {
       type: String,
       required: true,
-      unique: true,
+      // unique: true,
     },
     patient: {
       type: String,
@@ -56,6 +56,10 @@ const patientScheme = mongoose.Schema(
         },
       },
     ],
+    generalStatus: {
+      type: String,
+      default: 'Admitted',
+    },
   },
   {
     timestamps: true,
