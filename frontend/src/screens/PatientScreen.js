@@ -142,38 +142,27 @@ const PatientScreen = () => {
               <tbody>
                 {!isLoading &&
                   data.length > 0 &&
-                  data.map((adm) => (
-                    <tr key={adm._id}>
-                      <td>{adm.patientId}</td>
-                      <td>{adm.patient}</td>
-                      <td>{adm.doctor}</td>
-                      <td>
-                        {adm.room &&
-                          adm.room.slice(-1)[0].department.toUpperCase()}
-                      </td>
-
-                      <td>
-                        {adm.room && adm.room.slice(-1)[0].room.toUpperCase()}
-                      </td>
-
-                      <td> {adm.room && adm.room.slice(-1)[0].bed}</td>
+                  data.map((patient) => (
+                    <tr key={patient._id}>
+                      <td>{patient.patientId}</td>
+                      <td>{patient.patient}</td>
+                      <td>{patient.doctor}</td>
+                      <td>{patient.department.toUpperCase()}</td>
+                      <td>{patient.room.toUpperCase()}</td>
+                      <td> {patient.bed}</td>
                       <td>
                         <Moment format='YYYY-MM-DD HH:mm:ss'>
-                          {moment(adm.createdAt)}
+                          {moment(patient.dateIn)}
                         </Moment>
                       </td>
                       <td>
-                        {' '}
-                        {(adm.room &&
-                          adm.room.slice(-1)[0].status === 'Admitted') ||
-                        (adm.room &&
-                          adm.room.slice(-1)[0].status === 'Transfer')
+                        {patient.status === 'Admitted'
                           ? 'Inpatient'
                           : 'Discharged'}
                       </td>
                       <th className='btn-group'>
                         <Link
-                          to={`/patient/details/${adm._id}`}
+                          to={`/patient/details/${patient._id}`}
                           className='btn btn-primary btn-sm border-0'
                         >
                           <FaFileMedicalAlt className='mb-1' /> Detail
@@ -181,7 +170,7 @@ const PatientScreen = () => {
 
                         <button
                           className='btn btn-danger btn-sm ms-1'
-                          onClick={() => deleteHandler(adm._id)}
+                          onClick={() => deleteHandler(patient._id)}
                           disabled={isLoadingDeletePatient}
                         >
                           {isLoadingDeletePatient ? (

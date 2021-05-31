@@ -32,33 +32,28 @@ const patientScheme = mongoose.Schema(
       type: Number,
       required: true,
     },
-    room: [
-      {
-        department: {
-          type: String,
-          required: true,
-        },
-        room: {
-          type: String,
-          required: true,
-        },
-        bed: {
-          type: String,
-          required: true,
-        },
-        status: {
-          type: String,
-          default: 'Admitted',
-        },
-        date: {
-          type: Date,
-          required: true,
-        },
-      },
-    ],
-    generalStatus: {
+    department: {
+      type: String,
+      required: true,
+    },
+    room: {
+      type: String,
+      required: true,
+    },
+    bed: {
+      type: String,
+      required: true,
+    },
+    status: {
       type: String,
       default: 'Admitted',
+    },
+    dateIn: {
+      type: Date,
+      required: true,
+    },
+    dateOut: {
+      type: Date,
     },
   },
   {

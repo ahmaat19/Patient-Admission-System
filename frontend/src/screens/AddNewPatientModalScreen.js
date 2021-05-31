@@ -27,8 +27,7 @@ const AddNewPatientModalScreen = ({
 
   const vacantBeds = (number) => {
     const occupiedBeds =
-      patientsData &&
-      patientsData.map((patient) => Number(patient.room.slice(-1)[0].bed))
+      patientsData && patientsData.map((patient) => Number(patient.bed))
 
     let numArr = [...Array(number).keys()].map((x) => x + 1)
 
@@ -240,18 +239,20 @@ const AddNewPatientModalScreen = ({
                 </div>
                 <div className='col-md-3 col-12'>
                   <div className='mb-3'>
-                    <label htmlFor='date'>Admission Date</label>
+                    <label htmlFor='dateIn'>Admission Date</label>
                     <input
-                      {...register('date', {
+                      {...register('dateIn', {
                         required: 'Admission date is required',
                       })}
                       type='datetime-local'
-                      placeholder='Enter date'
+                      placeholder='Enter dateIn'
                       className='form-control'
                       autoFocus
                     />
-                    {errors.date && (
-                      <span className='text-danger'>{errors.date.message}</span>
+                    {errors.dateIn && (
+                      <span className='text-danger'>
+                        {errors.dateIn.message}
+                      </span>
                     )}
                   </div>
                 </div>

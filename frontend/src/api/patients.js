@@ -63,3 +63,16 @@ export const updatePatient = async (obj) => {
     throw error.response.data.message
   }
 }
+
+export const updatePatientTransfer = async (obj) => {
+  try {
+    const { data } = await axios.put(
+      `/api/patients/patient/transfer/${obj._id}`,
+      obj.updatedData,
+      config()
+    )
+    return data
+  } catch (error) {
+    throw error.response.data.message
+  }
+}

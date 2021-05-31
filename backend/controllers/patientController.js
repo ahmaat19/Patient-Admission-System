@@ -27,29 +27,21 @@ export const addPatient = asyncHandler(async (req, res) => {
     guardian,
     relationship,
     contact,
-    room,
     department,
+    room,
     bed,
-    status,
-    date,
+    dateIn,
   } = req.body
 
   const exist = await PatientModel.findOne({
     patientId,
-    generalStatus: { $eq: 'Discharged' },
+    status: { $eq: 'Admitted' },
   })
   if (exist) {
     res.status(400)
     throw new Error(`This patient ${patient} already admitted`)
   }
 
-  const roomArr = {
-    room,
-    department,
-    bed,
-    status,
-    date,
-  }
   const createObj = await PatientModel.create({
     user,
     patientId,
@@ -58,14 +50,18 @@ export const addPatient = asyncHandler(async (req, res) => {
     guardian,
     relationship,
     contact,
-    room: roomArr,
+    department,
+    room,
+    bed,
+    status: 'Admitted',
+    dateIn,
   })
 
   if (createObj) {
     res.status(201).json({ status: 'success' })
   } else {
     res.status(400)
-    throw new Error('Invalid user data')
+    throw new Error('Invalid patient data')
   }
 })
 
@@ -80,7 +76,7 @@ export const updatePatient = asyncHandler(async (req, res) => {
     const exist = await PatientModel.find({
       _id: { $ne: _id },
       patientId,
-      generalStatus: { $eq: 'Discharged' },
+      status: { $eq: 'Admitted' },
     })
     if (exist.length === 0) {
       obj.patientId = patientId
@@ -110,5 +106,27 @@ export const deletePatient = asyncHandler(async (req, res) => {
   } else {
     await obj.remove()
     res.status(201).json({ status: 'success' })
+  }
+})
+
+export const updatePatientTransfer = asyncHandler(async (req, res) => {
+  const _id = req.params.id
+  const { department, room, bed } = req.body
+
+  const obj = await PatientModel.findOne({ _id, status: { $eq: 'Admitted' } })
+
+  if (obj) {
+    if (Number(obj.bed) === Number(bed) && obj.room === room) {
+      res.status(400)
+      throw new Error(`This ${room} with ${bed} is already occupied`)
+    }
+    obj.department = department
+    obj.room = room
+    obj.bed = bed
+    await obj.save()
+    res.status(201).json({ status: 'success' })
+  } else {
+    res.status(400)
+    throw new Error(`This patient ${_id} were not found`)
   }
 })

@@ -8,11 +8,11 @@ import {
   FaArrowAltCircleLeft,
   FaCheckCircle,
   FaEdit,
-  FaTimesCircle,
   FaUserInjured,
 } from 'react-icons/fa'
 import moment from 'moment'
 import UpdatePatientInfoModalScreen from './UpdatePatientInfoModalScreen'
+import TransferPatientModalScreen from './TransferPatientModalScreen'
 
 const PatientDetailScreen = () => {
   const { id } = useParams()
@@ -47,7 +47,11 @@ const PatientDetailScreen = () => {
                 </Link>
                 <span className='fw-bold'>Patient Admission History</span>{' '}
                 <span className='btn-group'>
-                  <button className='btn btn-primary btn-sm mx-1'>
+                  <button
+                    className='btn btn-primary btn-sm mx-1'
+                    data-bs-toggle='modal'
+                    data-bs-target='#updatePatientTransfer'
+                  >
                     Transfer
                   </button>
                   <button className='btn btn-danger btn-sm mx-1'>
@@ -58,9 +62,6 @@ const PatientDetailScreen = () => {
               <hr />
               <div className='table-responsive'>
                 <table className='table table-sm hover bordered striped caption-top '>
-                  <caption>
-                    {data.room && data.room.length} updated history
-                  </caption>
                   <thead>
                     <tr>
                       <th>DATE-IN</th>
@@ -72,28 +73,21 @@ const PatientDetailScreen = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {data &&
-                      data.room &&
-                      data.room.length > 0 &&
-                      data.room.map((r) => (
-                        <tr key={r._id}>
-                          <td>{moment(r.date).format('lll')}</td>
-                          <td>{r.department.toUpperCase()}</td>
-                          <td>{r.room.toUpperCase()}</td>
-                          <td>{r.bed}</td>
-                          <td>
-                            {r.status === 'Admitted' ? (
-                              <FaCheckCircle className='mb-1 text-success' />
-                            ) : r.status === 'Transferred' ? (
-                              <FaTimesCircle className='mb-1 text-secondary' />
-                            ) : (
-                              r.status === 'Discharged' && (
-                                <FaCheckCircle className='mb-1 text-secondary' />
-                              )
-                            )}
-                          </td>
-                        </tr>
-                      ))}
+                    <tr>
+                      <td>{moment(data.dateIn).format('lll')}</td>
+                      <td>{data.department.toUpperCase()}</td>
+                      <td>{data.room.toUpperCase()}</td>
+                      <td>{data.bed}</td>
+                      <td>
+                        {data.status === 'Admitted' ? (
+                          <FaCheckCircle className='mb-1 text-success' />
+                        ) : (
+                          data.status === 'Discharged' && (
+                            <FaCheckCircle className='mb-1 text-secondary' />
+                          )
+                        )}
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -122,10 +116,10 @@ const PatientDetailScreen = () => {
                 <span className='fw-bold'>Doctor: </span> {data.doctor}
                 <br />
                 <span className='fw-bold'>Admission Date-In: </span>
-                {moment(data.createdAt).format('lll')} <br />
+                {moment(data.dateIn).format('lll')} <br />
                 <span className='fw-bold'>Status: </span>{' '}
                 <span className='bg-info px-2 rounded-1 text-light'>
-                  {data.room && data.room.slice(-1)[0].status} <br />
+                  {data.status} <br />
                 </span>
                 <span className='fw-bold'>Guardian: </span>
                 {data.guardian} <br />
@@ -137,6 +131,7 @@ const PatientDetailScreen = () => {
             </div>
           </div>
           <UpdatePatientInfoModalScreen data={!isLoading && data} />
+          <TransferPatientModalScreen data={!isLoading && data} />
         </>
       )}
     </div>
