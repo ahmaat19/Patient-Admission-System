@@ -55,6 +55,9 @@ const patientScheme = mongoose.Schema(
     dateOut: {
       type: Date,
     },
+    dischargeDescription: {
+      type: String,
+    },
   },
   {
     timestamps: true,

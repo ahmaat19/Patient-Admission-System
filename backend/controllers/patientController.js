@@ -116,10 +116,10 @@ export const updatePatientTransfer = asyncHandler(async (req, res) => {
   const obj = await PatientModel.findOne({ _id, status: { $eq: 'Admitted' } })
 
   if (obj) {
-    if (Number(obj.bed) === Number(bed) && obj.room === room) {
-      res.status(400)
-      throw new Error(`This ${room} with ${bed} is already occupied`)
-    }
+    // if (Number(obj.bed) === Number(bed) && obj.room === room) {
+    //   res.status(400)
+    //   throw new Error(`This ${room} with ${bed} is already occupied`)
+    // }
     obj.department = department
     obj.room = room
     obj.bed = bed

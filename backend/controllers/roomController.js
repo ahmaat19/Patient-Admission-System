@@ -8,7 +8,11 @@ export const addRoom = asyncHandler(async (req, res) => {
   const user = req.user.id
   const department = req.body.department
 
-  const exist = await RoomModel.findOne({ name })
+  const exist = await RoomModel.findOne({
+    name,
+    department: { $eq: department },
+  })
+
   if (exist) {
     res.status(400)
     throw new Error('Room already exist')
@@ -39,7 +43,11 @@ export const updateRoom = asyncHandler(async (req, res) => {
   const obj = await RoomModel.findById(_id)
 
   if (obj) {
-    const exist = await RoomModel.find({ _id: { $ne: _id }, name })
+    const exist = await RoomModel.find({
+      _id: { $ne: _id },
+      name,
+      department: { $eq: department },
+    })
     if (exist.length === 0) {
       obj.name = name
       obj.bed = bed

@@ -25,11 +25,28 @@ const AddNewPatientModalScreen = ({
     refetchInterval: 10000,
   })
 
-  const vacantBeds = (number) => {
-    const occupiedBeds =
-      patientsData && patientsData.map((patient) => Number(patient.bed))
+  const vacantBeds = () => {
+    const bedArr =
+      roomData &&
+      roomData.filter(
+        (room) =>
+          room.isActive &&
+          room.department.name === watch().department &&
+          room.name === watch().room &&
+          room.bed
+      )
 
-    let numArr = [...Array(number).keys()].map((x) => x + 1)
+    const bed = bedArr && bedArr.length > 0 && bedArr[0].bed
+
+    const occupiedBeds =
+      patientsData &&
+      patientsData.map(
+        (patient) =>
+          patient.room === watch().room &&
+          patient.department === watch().department &&
+          Number(patient.bed)
+      )
+    let numArr = [...Array(bed).keys()].map((x) => x + 1)
 
     let filtered = numArr.filter((x) => !occupiedBeds.includes(x))
 
@@ -301,15 +318,7 @@ const AddNewPatientModalScreen = ({
                       autoFocus
                     >
                       <option value=''>-----------</option>
-                      {roomData &&
-                        roomData.map(
-                          (room) =>
-                            room.isActive &&
-                            room.department &&
-                            room.department.name === watch().department &&
-                            room.name === watch().room &&
-                            vacantBeds(room.bed)
-                        )}
+                      {vacantBeds()}
                     </select>
                     {errors.bed && (
                       <span className='text-danger'>{errors.bed.message}</span>
