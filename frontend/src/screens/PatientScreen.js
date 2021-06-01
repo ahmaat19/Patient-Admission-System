@@ -26,6 +26,8 @@ const PatientScreen = () => {
 
   const queryClient = useQueryClient()
 
+  const [search, setSearch] = useState('')
+
   const { data, error, isLoading, isError } = useQuery(
     'patients',
     async () => await getPatients(),
@@ -56,8 +58,6 @@ const PatientScreen = () => {
     retry: 0,
     onSuccess: () => queryClient.invalidateQueries(['patients']),
   })
-
-  const [search, setSearch] = useState('')
 
   const deleteHandler = (id) => {
     confirmAlert(Confirm(() => DeletePatientMutateAsync(id)))
@@ -101,10 +101,10 @@ const PatientScreen = () => {
       <input
         type='text'
         className='form-control text-info '
-        placeholder='Search by Email or Name'
+        placeholder='Search by Patient ID'
         name='search'
         value={search}
-        onChange={(e) => setSearch(e.target.value.toLowerCase())}
+        onChange={(e) => setSearch(e.target.value.toUpperCase())}
         autoFocus
         required
       />
@@ -142,50 +142,53 @@ const PatientScreen = () => {
               <tbody>
                 {!isLoading &&
                   data.length > 0 &&
-                  data.map((patient) => (
-                    <tr key={patient._id}>
-                      <td>{patient.patientId}</td>
-                      <td>{patient.patient}</td>
-                      <td>{patient.doctor}</td>
-                      <td>{patient.department.toUpperCase()}</td>
-                      <td>{patient.room.toUpperCase()}</td>
-                      <td> {patient.bed}</td>
-                      <td>
-                        <Moment format='YYYY-MM-DD HH:mm:ss'>
-                          {moment(patient.dateIn)}
-                        </Moment>
-                      </td>
-                      <td>
-                        {patient.status === 'Admitted'
-                          ? 'Inpatient'
-                          : 'Discharged'}
-                      </td>
-                      <th className='btn-group'>
-                        <Link
-                          to={`/patient/details/${patient.patientId}/${patient._id}`}
-                          className='btn btn-primary btn-sm border-0'
-                        >
-                          <FaFileMedicalAlt className='mb-1' /> Detail
-                        </Link>
-                        {patient.status !== 'Discharged' && (
-                          <button
-                            className='btn btn-danger btn-sm ms-1'
-                            onClick={() => deleteHandler(patient._id)}
-                            disabled={isLoadingDeletePatient}
-                          >
-                            {isLoadingDeletePatient ? (
-                              <span className='spinner-border spinner-border-sm' />
-                            ) : (
-                              <span>
-                                {' '}
-                                <FaTrash className='mb-1' /> Delete
-                              </span>
+                  data.map(
+                    (patient) =>
+                      patient.patientId.includes(search) && (
+                        <tr key={patient._id}>
+                          <td>{patient.patientId}</td>
+                          <td>{patient.patient}</td>
+                          <td>{patient.doctor}</td>
+                          <td>{patient.department.toUpperCase()}</td>
+                          <td>{patient.room.toUpperCase()}</td>
+                          <td> {patient.bed}</td>
+                          <td>
+                            <Moment format='YYYY-MM-DD HH:mm:ss'>
+                              {moment(patient.dateIn)}
+                            </Moment>
+                          </td>
+                          <td>
+                            {patient.status === 'Admitted'
+                              ? 'Inpatient'
+                              : 'Discharged'}
+                          </td>
+                          <th className='btn-group'>
+                            <Link
+                              to={`/patient/details/${patient.patientId}/${patient._id}`}
+                              className='btn btn-primary btn-sm border-0'
+                            >
+                              <FaFileMedicalAlt className='mb-1' /> Detail
+                            </Link>
+                            {patient.status !== 'Discharged' && (
+                              <button
+                                className='btn btn-danger btn-sm ms-1'
+                                onClick={() => deleteHandler(patient._id)}
+                                disabled={isLoadingDeletePatient}
+                              >
+                                {isLoadingDeletePatient ? (
+                                  <span className='spinner-border spinner-border-sm' />
+                                ) : (
+                                  <span>
+                                    {' '}
+                                    <FaTrash className='mb-1' /> Delete
+                                  </span>
+                                )}
+                              </button>
                             )}
-                          </button>
-                        )}
-                      </th>
-                    </tr>
-                  ))}
+                          </th>
+                        </tr>
+                      )
+                  )}
               </tbody>
             </table>
           </div>

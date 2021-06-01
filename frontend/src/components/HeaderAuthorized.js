@@ -19,7 +19,7 @@ const HeaderAuthorized = () => {
       <nav className='sticky-top' id='sidebar'>
         <div className='container-fluid pt-3'>
           <Link to='/' className='navbar-brand fw-bold fs-6'>
-            Boilerplate
+            P.A. System
           </Link>
           <ul
             className='navbar-nav text-light d-flex justify-content-between'
