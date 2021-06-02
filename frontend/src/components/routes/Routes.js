@@ -16,6 +16,7 @@ import ForgotPasswordScreen from '../../screens/ForgotPasswordScreen'
 import ResetPasswordScreen from '../../screens/ResetPasswordScreen'
 import PatientScreen from '../../screens/PatientScreen'
 import PatientDetailScreen from '../../screens/PatientDetailScreen'
+import OccupıedScreen from '../../screens/OccupıedScreen'
 
 const Routes = () => {
   return (
@@ -43,6 +44,13 @@ const Routes = () => {
           role={['Admin', 'User']}
           path='/patient/details/:patientId/:id'
           component={PatientDetailScreen}
+        />
+
+        <PrivateRoute
+          exact
+          role={['Admin', 'User']}
+          path='/occupied'
+          component={OccupıedScreen}
         />
 
         <Route

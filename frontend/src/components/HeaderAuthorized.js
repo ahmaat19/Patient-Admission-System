@@ -19,7 +19,7 @@ const HeaderAuthorized = () => {
       <nav className='sticky-top' id='sidebar'>
         <div className='container-fluid pt-3'>
           <Link to='/' className='navbar-brand fw-bold fs-6'>
-            P.A. System
+            H.B.M.S
           </Link>
           <ul
             className='navbar-nav text-light d-flex justify-content-between'
@@ -43,6 +43,11 @@ const HeaderAuthorized = () => {
                     </Link>
                   </li>
                 </ul>
+              </li>
+              <li className='nav-item'>
+                <Link to='/occupied' className='nav-link'>
+                  <FaProcedures className='mb-1' /> Occupied Beds
+                </Link>
               </li>
             </div>
 

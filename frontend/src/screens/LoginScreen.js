@@ -85,12 +85,12 @@ const LoginScreen = ({ history }) => {
           <Link to='/forgotpassword'> Forgot Password</Link>
         </div>
       </div>
-      <div className='row '>
+      {/* <div className='row '>
         <div className='col'>
           New Customer?
           <Link to='/register'> Register</Link>
         </div>
-      </div>
+      </div> */}
     </FormContainer>
   )
 }

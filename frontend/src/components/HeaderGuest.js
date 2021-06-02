@@ -1,12 +1,17 @@
 import { Link } from 'react-router-dom'
-import { FaPlusCircle, FaSignInAlt, FaUserPlus } from 'react-icons/fa'
+import {
+  // FaPlusCircle,
+  FaProcedures,
+  FaSignInAlt,
+  // FaUserPlus,
+} from 'react-icons/fa'
 
 const HeaderGuest = () => {
   return (
     <nav className='navbar navbar-expand-sm navbar-light  shadow-lg'>
       <div className='container'>
         <Link className='navbar-brand' to='/'>
-          DarkPro <FaPlusCircle className='mb-1' />
+          <FaProcedures className='mb-1' /> Hospital Bed Management System
         </Link>
         <button
           className='navbar-toggler'
@@ -21,11 +26,11 @@ const HeaderGuest = () => {
         </button>
         <div className='collapse navbar-collapse' id='navbarSupportedContent'>
           <ul className='navbar-nav ms-auto mb-2 mb-lg-0'>
-            <li className='nav-item'>
+            {/* <li className='nav-item'>
               <Link to='/register' className='nav-link'>
                 <FaUserPlus className='mb-1' /> Register
               </Link>
-            </li>
+            </li> */}
             <li className='nav-item'>
               <Link to='/login' className='nav-link'>
                 <FaSignInAlt className='mb-1' /> Login
