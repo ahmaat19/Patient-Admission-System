@@ -130,16 +130,23 @@ const UpdatePatientInfoModalScreen = ({ data }) => {
                         autoFocus
                       >
                         <option value=''>--------</option>
-                        <option value='Dr. Abdirashid Sheyk'>
-                          Dr. Abdirashid Sheyk
+                        <option value='Dr. Abdirashid Sheyk Yusuf'>
+                          Dr. Abdirashid Sheyk Yusuf
                         </option>
-                        <option value='Dr. Tony'>Dr. Tony</option>
-                        <option value='Dr. Mashhura'>Dr. Mashhura</option>
+                        <option value='Dr. Tony Kashe'>Dr. Tony Kashe</option>
+                        <option value='Dr. Mohamed Haji'>
+                          Dr. Mohamed Haji
+                        </option>
                         <option value='Dr. Ramez'>Dr. Ramez</option>
-                        <option value='Dr. Hashi'>Dr. Hashi</option>
+                        <option value='Dr. Ali Tamim'>Dr. Ali Tamim</option>
                         <option value='Dr. Ramla'>Dr. Ramla</option>
-                        <option value='Dr. Mohamud Fiiqow'>
-                          Dr. Mohamud Fiiqow
+                        <option value='Dr. Ramez'>Dr. Ramez</option>
+                        <option value='Dr. Anas'>Dr. Anas</option>
+                        <option value='Dr. Abdirahman Dhere'>
+                          Dr. Abdirahman Dhere
+                        </option>
+                        <option value='Dr. Abdalla Hagazi'>
+                          Dr. Abdalla Hagazi
                         </option>
                       </select>
                       {errors.doctor && (

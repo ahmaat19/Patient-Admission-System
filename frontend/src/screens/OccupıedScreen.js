@@ -44,10 +44,12 @@ const OccupıedScreen = () => {
                   {room.department.name.toUpperCase()}
                 </span>
               </div>
-              <div className='col-10'>
+              <div className='col-2'>
                 <span className='btn btn-light btn-lg rounded-0 mx-1'>
                   {room.name.toUpperCase()}
                 </span>
+              </div>
+              <div className='col-8'>
                 <span className='btn btn-secondary btn-lg rounded-0 mx-1'>
                   TOTAL {room.bed}
                 </span>
@@ -61,14 +63,16 @@ const OccupıedScreen = () => {
                       [...Array(room.bed).keys()].map(
                         (x) =>
                           patient.bed.includes(x + 1) && (
-                            <span key={x + 1}>
-                              <Link
-                                to={`/patient/details/${patient.patientId}/${patient._id}`}
-                                className='btn bg-success text-light btn-lg rounded-0'
-                              >
-                                BED {patient.bed.includes(x + 1) && x + 1}
-                              </Link>
-                            </span>
+                            <>
+                              <span key={x + 1}>
+                                <Link
+                                  to={`/patient/details/${patient.patientId}/${patient._id}`}
+                                  className='btn bg-success text-light btn-lg rounded-0 mx-1'
+                                >
+                                  BED {patient.bed.includes(x + 1) && x + 1}
+                                </Link>
+                              </span>
+                            </>
                           )
                       )
                   )}
